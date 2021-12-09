@@ -1,0 +1,162 @@
+#  --- Day 3: Binary Diagnostic ---
+#  --- Part Two ---
+#  Next, you should verify the life support rating, which can be determined by multiplying the oxygen generator rating by the CO2 scrubber rating.
+
+#  Both the oxygen generator rating and the CO2 scrubber rating are values that can be found in your diagnostic report - finding them is the tricky part.
+#  Both values are located using a similar process that involves filtering out values until only one remains.
+#  Before searching for either rating value, start with the full list of binary numbers from your diagnostic report and consider just the first bit of those numbers. Then:
+
+#  Keep only numbers selected by the bit criteria for the type of rating value for which you are searching. Discard numbers which do not match the bit criteria.
+#  If you only have one number left, stop; this is the rating value for which you are searching.
+#  Otherwise, repeat the process, considering the next bit to the right.
+#  The bit criteria depends on which type of rating value you want to find:
+
+#  To find oxygen generator rating, determine the most common value (0 or 1) in the current bit position, and keep only numbers with that bit in that position.
+#  If 0 and 1 are equally common, keep values with a 1 in the position being considered.
+
+#  To find CO2 scrubber rating, determine the least common value (0 or 1) in the current bit position, and keep only numbers with that bit in that position.
+#  If 0 and 1 are equally common, keep values with a 0 in the position being considered.
+#  For example, to determine the oxygen generator rating value using the same example diagnostic report from above:
+
+#  Start with all 12 numbers and consider only the first bit of each number.
+#  There are more 1 bits (7) than 0 bits (5), so keep only the 7 numbers with a 1 in the first position: 11110, 10110, 10111, 10101, 11100, 10000, and 11001.
+#  Then, consider the second bit of the 7 remaining numbers: there are more 0 bits (4) than 1 bits (3), so keep only the 4 numbers with a 0 in the second position: 10110, 10111, 10101, and 10000.
+#  In the third position, three of the four numbers have a 1, so keep those three: 10110, 10111, and 10101.
+#  In the fourth position, two of the three numbers have a 1, so keep those two: 10110 and 10111.
+#  In the fifth position, there are an equal number of 0 bits and 1 bits (one each). So, to find the oxygen generator rating, keep the number with a 1 in that position: 10111.
+#  As there is only one number left, stop; the oxygen generator rating is 10111, or 23 in decimal.
+#  Then, to determine the CO2 scrubber rating value from the same example above:
+
+#  Start again with all 12 numbers and consider only the first bit of each number.
+#  There are fewer 0 bits (5) than 1 bits (7), so keep only the 5 numbers with a 0 in the first position: 00100, 01111, 00111, 00010, and 01010.
+#  Then, consider the second bit of the 5 remaining numbers: there are fewer 1 bits (2) than 0 bits (3), so keep only the 2 numbers with a 1 in the second position: 01111 and 01010.
+#  In the third position, there are an equal number of 0 bits and 1 bits (one each). So, to find the CO2 scrubber rating, keep the number with a 0 in that position: 01010.
+#  As there is only one number left, stop; the CO2 scrubber rating is 01010, or 10 in decimal.
+#  Finally, to find the life support rating, multiply the oxygen generator rating (23) by the CO2 scrubber rating (10) to get 230.
+
+#  Use the binary numbers in your diagnostic report to calculate the oxygen generator rating and CO2 scrubber rating, then multiply them together.
+#  What is the life support rating of the submarine? (Be sure to represent your answer in decimal, not binary.)
+
+#init vars
+mcb=[]
+lcb=[]
+count=0
+bit=[]
+gamma=0
+epsilon=0
+list1=[]
+list2=[]
+
+for i in range(1, 14):
+#for i in range(1, 7):
+	bit.append(0)
+	mcb.append(0)
+	lcb.append(0)
+#	print(i)
+	
+#print(bit)
+#read a record
+file1 = open('Day3Input_TestHarness.txt', 'r')
+
+for line in file1:
+	diag=line.split()
+	count+=1
+#	print("DIAG: ",diag)
+	for i,c in enumerate(diag[0]):
+#		print("i:", i, "c:", c)
+#		print(c)
+		bit[i+1]=bit[i+1]+int(c)
+#print("1:", bit[1], "2: ",bit[2], "3: ",bit[3], "4: ",bit[4], "5:", bit[5],"6:", bit[6], "7: ",bit[7], "8:", bit[8], "9: ",bit[9], "10:", bit[10], "11: ",bit[11], "12:", bit[12])
+#print("1:", bit[1], "2: ",bit[2], "3: ",bit[3], "4: ",bit[4], "5:", bit[5],"6:")
+count=count/2
+
+
+for i,c in enumerate(mcb, start=0):
+#	print("BIT[i]",i,": ", bit[i], "COUNT: ", count)
+	if (bit[i]) > count:
+#	if True:
+#		print(i)
+		mcb[i]=1
+		lcb[i]=0
+	else:
+#		print()
+		mcb[i]=0
+		lcb[i]=1
+mcb[0]=0
+lcb[0]=0
+#print("MCB1:", mcb[1], "MCB2: ",mcb[2], "MCB3: ", mcb[3], "MCB4: ", mcb[4], "MCB5:", mcb[5],"MCB6:", mcb[6], "MCB7: ",mcb[7], "MCB8:", mcb[8], "MCB9: ",mcb[9], "MCB10:", mcb[10], "MCB11: ", mcb[11], "MCB12:", mcb[12])
+#print("LCB1:", lcb[1], "LCB2: ",lcb[2], "LCB3: ", lcb[3], "LCB4: ", lcb[4], "LCB5:", lcb[5],"LCB6:", lcb[6], "LCB7: ",lcb[7], "LCB8:", lcb[8], "LCB9: ",lcb[9], "LCB10:", lcb[10], "LCB11: ", lcb[11], "LCB12:", lcb[12])
+#print("MCB1:", mcb[1], "MCB2: ",mcb[2], "MCB3: ", mcb[3], "MCB4: ", mcb[4], "MCB5:", mcb[5])
+#print("LCB1:", lcb[1], "LCB2: ",lcb[2], "LCB3: ", lcb[3], "LCB4: ", lcb[4], "LCB5:", lcb[5])
+
+
+#  Here we have the mcb and the lcb which we can pass through the input again
+file1 = open('Day3Input_TestHarness.txt', 'r')
+list=[]
+for line in file1:
+	diag=line.strip('\n')
+	list.append(diag)
+
+list1=list.copy()
+list2=list.copy()
+
+print("LISTINPUT1: ", list1)
+print("LISTINPUT2: ", list2)
+# iterate each line seeing if it should be in one list or the other
+count1=0
+
+
+for d in range(0,5):
+	count1=0
+	for c in (list1):
+#		print("C", c, "D", d)
+#		print(c[0], c[1], c[2], c[3], c[4])
+		print("COUNT1", count1)
+		if c[d]=='1':
+			print("C", c, "D", d,"bit=1      ", list1)
+#			list1[count1]="VOID "
+		elif c[d]=='0':
+			list1[count1]="VOID "
+			print("C", c, "D", d,"bit=0, VOID", list1)
+
+		else:
+			print("C", c, "D", d,"error      ", list1)
+		count1+=1
+
+print()
+print("HALFWAY")
+print()
+
+for d in range(0,5):
+	count1=0
+	for c in (list2):
+#		print("C", c, "D", d)
+#		print(c[0], c[1], c[2], c[3])
+		print("COUNT1", count1)
+		if c[d]=='0':
+			print("C", c, "D", d,"bit=0      ", list2)
+#			list1[count1]="VOID "
+		elif c[d]=='1':
+			list2[count1]="VOID "
+			print("C", c, "D", d,"bit=1, VOID", list2)
+		else:
+			print("C", c, "D", d,"error      ", list2)
+		count1+=1
+
+print(list)
+print(list1)
+print(list2)
+
+
+
+for i,n in enumerate(mcb):
+	maxexp=(len(mcb)-1)
+#	print(maxexp)
+#	print(mcb[i])
+#	print("I:", i, "MCB[i]:",mcb[i], "TOTAL: ", mcb[i]*(2**(maxexp-i)))
+#	print("I:", i, "LCB[i]:",lcb[i], "TOTAL: ", lcb[i]*(2**(maxexp-i)))
+	gamma=gamma+mcb[i]*(2**(maxexp-i))
+	epsilon=epsilon+lcb[i]*(2**(maxexp-i))
+	multiply=gamma*epsilon
+print("AdventOfCode 2021: Puzzle 6")
+print("GAMMA: ", gamma, "EPSILON: ", epsilon, "POWER CONSUMPTION: ", multiply)
