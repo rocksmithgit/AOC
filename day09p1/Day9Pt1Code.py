@@ -29,3 +29,72 @@
 #   The sum of the risk levels of all low points in the heightmap is therefore 15.
 
 #  Find all of the low points on your heightmap. What is the sum of the risk levels of all low points on your heightmap?
+
+import numpy as np
+
+#lava = np.zeros(shape=(5, 10))
+lava = np.zeros(shape=(100, 100))
+
+def check_x(array, y, x):
+#    print(array.shape[1])
+    if x > 0 and x < array.shape[1] - 1:
+        if array[y, x] < array[y, x - 1] and array[y, x] < array[y, x + 1]:
+            return True
+        else:
+            return False
+    else:
+        if x == 0:
+            if array[y, x] < array[y, x + 1]:
+                return True
+            else:
+                return False
+        elif x == array.shape[1] - 1:
+            if array[y, x] < array[y, x - 1]:
+                return True
+            else:
+                return False
+
+
+def check_y(array, y, x):
+    if y > 0 and y < array.shape[0] - 1:
+        if array[y, x] < array[y - 1, x] and array[y, x] < array[y + 1, x]:
+            return True
+        else:
+            return False
+    else:
+        if y == 0:
+            if array[y, x] < array[y + 1, x]:
+                return True
+            else:
+                return False
+        elif y == array.shape[0] - 1:
+            if array[y, x] < array[y - 1, x]:
+                return True
+            else:
+                return False
+
+
+#file1 = open('C:/Users/scott/PycharmProjects/AOC2021/day09p1/Day9Input_TestHarness.txt', 'r')
+file1 = open('C:/Users/scott/PycharmProjects/AOC2021/day09p1/Day9Input.txt', 'r')
+count = -1
+for line in file1:
+    count += 1
+    diag = line.strip('\n').strip()
+    for x in range(len(diag)):
+        lava[count, x] = int(diag[x])
+#    print(diag)
+
+
+total = 0
+for r in range(100):
+    for c in range(100):
+        # print(lava)
+        # print(check_x(lava, 1, 0))
+        # print(check_y(lava, 1, 0))
+#        print(f"{c}, {r}, {lava[r, c]}")
+        if check_x(lava, r, c) == check_y(lava, r, c) == True:
+            print(f"MINIMUM FOUND, x {c} y {r} value {lava[r, c]}")
+            total += 1 + lava[r, c]
+print(f"TOTAL {total}")
+
+#  Your puzzle answer was 570.
