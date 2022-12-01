@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from collections import defaultdict, Counter, deque
+from pathlib import Path
 
 
 def get_data(inputdata):
@@ -49,6 +50,6 @@ def part_two(inputlist):
 
 inputData = 'd1.in'
 L = get_data(inputData)
-
+print(f"ADVENT OF CODE: {Path(__file__).stem}")
 print(f'part one: {part_one(L)}')
 print(f'part two: {part_two(L)}')
