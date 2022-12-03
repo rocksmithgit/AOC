@@ -4,6 +4,7 @@ from collections import defaultdict, Counter, deque
 from pathlib import Path
 from timeit import default_timer as timer
 
+
 def get_data(inputdata):
     infile = sys.argv[1] if len(sys.argv) > 1 else inputdata
     sanitised_list = []
@@ -64,4 +65,4 @@ end_part2 = timer()
 print(f"Elapsed Parse time: {(end_parse - start_parse)*1000:.3f}ms")
 print(f"Elapsed Part1 time: {(end_part1 - start_part1)*1000:.3f}ms")
 print(f"Elapsed Part2 time: {(end_part2 - start_part2)*1000:.3f}ms")
-print(f"Elapsed Total time: {(end_part1 - start_parse)*1000:.3f}ms")
+print(f"Elapsed Total time: {(end_part2 - start_parse)*1000:.3f}ms")

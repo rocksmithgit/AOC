@@ -58,16 +58,60 @@ def part_two(inputlist):
     return total
 
 
+def part_one_a(inputlist):
+    """
+    1. Having parsed input, split into two
+    2. Compare left to right to see if any member of left appear in right
+    3. For item appearing in both look up priority and dd to total
+    """
+    priority = {key: value+1 for value, key in enumerate('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')}
+    DEBUG1a and print(f"priorty: {priority}")
+    total = 0
+    for element in inputlist:
+        halfNumItems = int(len(element)/2)
+        set1 = set(element[:halfNumItems])
+        set2 = set(element[halfNumItems:])
+        DEBUG1a and print(f"Set1: {set1}, Set2: {set2}")
+        shared = (set1 & set2).pop()
+        DEBUG1a and print(f"shared: {shared}")
+        total += priority[shared]
+    return total
+
+
+def part_two_a(inputlist):
+    """
+    1. Get input into batches of 3 Sacks
+    2. For each item in Sack 1, see if appears in Sack 2 AND Sack 3
+    3. If it does assign priority and add to total
+    """
+    priority = {key: value + 1 for value, key in enumerate('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')}
+    total = 0
+    for x in range(int(len(inputlist) / 3)):
+        shortlist = inputlist[0+x*3:3+x*3]
+        DEBUG2a and print(f"shortlist: {shortlist}")
+        set1 = set(shortlist[0])
+        set2 = set(shortlist[1])
+        set3 = set(shortlist[2])
+        shared = (set1 & set2 & set3).pop()
+        DEBUG2a and print(f"Shared: {shared}")
+        total += priority[shared]
+    return total
+
+
+inputData = 'd3.in'
+
 print(f"ADVENT OF CODE: {Path(__file__).stem}")
 DEBUG1 = False
 DEBUG2 = False
-inputData = 'd3.in'
+DEBUG1a = False
+DEBUG2a = False
+
 start_parse = timer()
 L = get_data(inputData)
 end_parse = timer()
 
 start_part1 = timer()
-print(f'part one: {part_one(L)}')
+print(f'\npart one: {part_one(L)}')
 end_part1 = timer()
 start_part2 = timer()
 print(f'part two: {part_two(L)}')
@@ -76,4 +120,17 @@ end_part2 = timer()
 print(f"Elapsed Parse time: {(end_parse - start_parse)*1000:.3f}ms")
 print(f"Elapsed Part1 time: {(end_part1 - start_part1)*1000:.3f}ms")
 print(f"Elapsed Part2 time: {(end_part2 - start_part2)*1000:.3f}ms")
-print(f"Elapsed Total time: {(end_part1 - start_parse)*1000:.3f}ms")
+print(f"Elapsed computational time: {(end_part2 - start_part1)*1000:.3f}ms")
+print(f"Elapsed Total time: {((end_part2 - start_part1)+(end_parse - start_parse))*1000:.3f}ms")
+
+start_part1a = timer()
+print(f'\npart one a: {part_one_a(L)}')
+end_part1a = timer()
+start_part2a = timer()
+print(f'part two a: {part_two_a(L)}')
+end_part2a = timer()
+
+print(f"Elapsed Part1a time: {(end_part1a - start_part1a)*1000:.3f}ms")
+print(f"Elapsed Part2a time: {(end_part2a - start_part2a)*1000:.3f}ms")
+print(f"Elapsed computational time: {(end_part2a - start_part1a)*1000:.3f}ms")
+print(f"Elapsed Total time: {((end_part2a - start_part1a)+(end_parse - start_parse))*1000:.3f}ms")
