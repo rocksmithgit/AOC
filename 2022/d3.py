@@ -98,13 +98,18 @@ def part_two_a(inputlist):
     return total
 
 
-inputData = 'd3.in'
-
-print(f"ADVENT OF CODE: {Path(__file__).stem}")
 DEBUG1 = False
 DEBUG2 = False
 DEBUG1a = False
 DEBUG2a = False
+TESTING = False
+
+if TESTING:
+    inputData = f'{Path(__file__).stem}_test.in'
+else:
+    inputData = f'{Path(__file__).stem}.in'
+
+print(f"ADVENT OF CODE: {Path(__file__).stem}")
 
 start_parse = timer()
 L = get_data(inputData)
@@ -130,6 +135,7 @@ start_part2a = timer()
 print(f'part two a: {part_two_a(L)}')
 end_part2a = timer()
 
+print(f"Elapsed Parse time: {(end_parse - start_parse)*1000:.3f}ms")
 print(f"Elapsed Part1a time: {(end_part1a - start_part1a)*1000:.3f}ms")
 print(f"Elapsed Part2a time: {(end_part2a - start_part2a)*1000:.3f}ms")
 print(f"Elapsed computational time: {(end_part2a - start_part1a)*1000:.3f}ms")
