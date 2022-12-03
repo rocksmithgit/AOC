@@ -2,6 +2,7 @@ import sys
 import numpy as np
 from collections import defaultdict, Counter, deque
 from pathlib import Path
+from timeit import default_timer as timer
 
 
 def get_data(inputdata):
@@ -57,10 +58,22 @@ def part_two(inputlist):
     return total
 
 
+print(f"ADVENT OF CODE: {Path(__file__).stem}")
 DEBUG1 = False
 DEBUG2 = False
 inputData = 'd3.in'
+start_parse = timer()
 L = get_data(inputData)
-print(f"ADVENT OF CODE: {Path(__file__).stem}")
+end_parse = timer()
+
+start_part1 = timer()
 print(f'part one: {part_one(L)}')
+end_part1 = timer()
+start_part2 = timer()
 print(f'part two: {part_two(L)}')
+end_part2 = timer()
+
+print(f"Elapsed Parse time: {(end_parse - start_parse)*1000:.3f}ms")
+print(f"Elapsed Part1 time: {(end_part1 - start_part1)*1000:.3f}ms")
+print(f"Elapsed Part2 time: {(end_part2 - start_part2)*1000:.3f}ms")
+print(f"Elapsed Total time: {(end_part1 - start_parse)*1000:.3f}ms")
