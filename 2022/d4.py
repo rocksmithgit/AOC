@@ -6,15 +6,14 @@ from timeit import default_timer as timer
 
 
 def timer_func(func):
-    # This function shows the execution time of
-    # the function object passed
+    # This function shows the execution time of the function object passed
     def wrap_func(*args, **kwargs):
         t1 = timer()
         result = func(*args, **kwargs)
         t2 = timer()
         print(f'Function {func.__name__!r} executed in {(t2 - t1):.4f}s')
+        total_time.append((t2 - t1))
         return result
-
     return wrap_func
 
 
@@ -77,7 +76,7 @@ def part_two(inputlist):
             total += 1
     return total
 
-
+total_time = []
 DEBUG1 = False
 DEBUG2 = False
 TESTING = False
@@ -105,3 +104,4 @@ print(f"Part two: {part_two(L)}")
 #print(f"Elapsed Part2 time: {(end_part2 - start_part2)*1000:.3f}ms")
 #print(f"Elapsed computational time: {(end_part2 - start_part1)*1000:.3f}ms")
 #print(f"Elapsed Total time: {((end_part2 - start_part1)+(end_parse - start_parse))*1000:.3f}ms")
+print(f"Elapsed Total time: {sum(total_time):.4f}s")
