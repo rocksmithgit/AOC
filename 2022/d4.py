@@ -87,21 +87,7 @@ else:
     inputData = f'{Path(__file__).stem}.in'
 
 print(f"ADVENT OF CODE: {Path(__file__).stem}")
-
-#start_parse = timer()
 L = get_data(inputData)
-#end_parse = timer()
-
-#start_part1 = timer()
 print(f"Part one: {part_one(L)}")
-#end_part1 = timer()
-#start_part2 = timer()
 print(f"Part two: {part_two(L)}")
-#end_part2 = timer()
-
-#print(f"Elapsed Parse time: {(end_parse - start_parse)*1000:.3f}ms")
-#print(f"Elapsed Part1 time: {(end_part1 - start_part1)*1000:.3f}ms")
-#print(f"Elapsed Part2 time: {(end_part2 - start_part2)*1000:.3f}ms")
-#print(f"Elapsed computational time: {(end_part2 - start_part1)*1000:.3f}ms")
-#print(f"Elapsed Total time: {((end_part2 - start_part1)+(end_parse - start_parse))*1000:.3f}ms")
 print(f"Elapsed Total time: {sum(total_time):.4f}s")
