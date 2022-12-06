@@ -28,7 +28,7 @@ def get_data(inputdata):
         for line in f:
             stripped = line.strip('\n')
             if stripped:
-                holding.append(stripped)
+                holding.append(stripped.strip())
             else:
                 parsed.append(holding)
                 holding = []
@@ -120,10 +120,10 @@ def part_two(inputlist):
 total_time = []
 DEBUG1 = False
 DEBUG2 = False
-TESTING = False
+TESTING = True
 
 if TESTING:
-    inputData = f'{Path(__file__).stem}_test.in'
+    inputData = f'{Path(__file__).stem}_test2.in'
 else:
     inputData = f'{Path(__file__).stem}.in'
 
