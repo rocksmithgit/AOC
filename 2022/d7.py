@@ -83,6 +83,7 @@ def part_one(inputlist):
     3.  Ignore 'dir' statements as we will pick up their size via a 'cd'
     4.  For file size data (ie not 'cd', 'dir' or 'ls' it will be size / name, add to a dictionary that has keys equal
         to a tuple made from the directory path)
+    4a. Add the current file_size to every path key above and including the current directory
     5.  Sum the size of directories if they are less than stated size
     :param inputlist:
     :return:
@@ -116,6 +117,7 @@ def part_two(inputlist):
     3.  Ignore 'dir' statements as we will pick up their size via a 'cd'
     4.  For file size data (ie not 'cd', 'dir' or 'ls' it will be size / name, add to a dictionary that has keys equal
         to a tuple made from the directory path)
+    4a. Add the current file_size to every path key above and including the current directory
     5.  Calculate the reqd directory size to free space ie update_size - (capacity - total_used) when total_used is
         just the size of '/'
     :param inputlist:
