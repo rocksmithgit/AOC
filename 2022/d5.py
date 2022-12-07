@@ -28,11 +28,14 @@ def get_data(inputdata):
         for line in f:
             stripped = line.strip('\n')
             if stripped:
-                holding.append(stripped.strip())
+                stripped = line.rstrip()
+                DEBUG1 and print(stripped)
+                holding.append(stripped)
             else:
                 parsed.append(holding)
                 holding = []
         parsed.append(holding)
+    print("Parsing Input Complete")
     return parsed
 
 
@@ -53,18 +56,23 @@ def part_one(inputlist):
         crates.append(row[1::4])
         DEBUG1 and print(f"crates: {crates}")
     new_stack = [str(x) for x in range(1, max+1)]
+    count = 0
     for row in crates:
+        count += 1
+        count % 10000 == 0 and print(f"{count / len(stacks)*100}% complete")
         DEBUG1 and print(f"row: {row}")
         for i, pile in enumerate(row):
             if pile != ' ':
                 new_stack[i] = new_stack[i]+pile
     DEBUG1 and print(f"new_stack: {new_stack}")
+    print("Parsing Stacks Complete")
     instructions = inputlist[1][::]
     DEBUG1 and print(f"stacks: {stacks}, instructions: {instructions}")
     DEBUG1 and print(f"new_stack: {new_stack}")
+    count = 0
     for instruction in instructions:
-        thing = re.findall(r'\d+', instruction)
-        DEBUG1 and print(f"digit: {thing}")
+        count += 1
+        count % 1000 == 0 and print(f"{count % len(instructions)}% complete")
         number_to_move, from_stack, to_stack = map(int, re.findall(r'\d+', instruction))
         DEBUG1 and print(f"\n#: {number_to_move}, from: {from_stack}, to: {to_stack}, stacks: {new_stack}")
         to_move = new_stack[from_stack-1][-number_to_move:][::-1]
@@ -100,12 +108,14 @@ def part_two(inputlist):
             if pile != ' ':
                 new_stack[i] = new_stack[i] + pile
     DEBUG2 and print(f"new_stack: {new_stack}")
+    print("Parsing Stacks Complete")
     instructions = inputlist[1][::]
     DEBUG2 and print(f"stacks: {stacks}, instructions: {instructions}")
     DEBUG2 and print(f"new_stack: {new_stack}")
+    count = 0
     for instruction in instructions:
-        thing = re.findall(r'\d+', instruction)
-        DEBUG2 and print(f"digit: {thing}")
+        count += 1
+        len(instructions) % 1000 == 0 and print(f"{count % len(instructions)}% complete")
         number_to_move, from_stack, to_stack = map(int, re.findall(r'\d+', instruction))
         DEBUG2 and print(f"\n#: {number_to_move}, from: {from_stack}, to: {to_stack}, stacks: {new_stack}")
         to_move = new_stack[from_stack - 1][-number_to_move:]
