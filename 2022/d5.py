@@ -28,14 +28,11 @@ def get_data(inputdata):
         for line in f:
             stripped = line.strip('\n')
             if stripped:
-                stripped = line.rstrip()
-                DEBUG1 and print(stripped)
-                holding.append(stripped)
+                holding.append(stripped.rstrip())
             else:
                 parsed.append(holding)
                 holding = []
         parsed.append(holding)
-    print("Parsing Input Complete")
     return parsed
 
 
@@ -51,29 +48,43 @@ def part_one(inputlist):
     stacks = inputlist[0][::-1]
     DEBUG1 and print(f"original stack: {stacks}")
     crates = []
-    max = int(stacks[0][-1])
+    mx = int(stacks[0][-1])
     for row in stacks:
-        crates.append(row[1::4])
+        DEBUG1 and print(f"Row: {row}")
+        rw = row[1::4]
+        word = [x for x in rw]
+        for extra in range(0, mx - len(word)):
+            word.append(' ')
+        DEBUG1 and print(f"Word: {word}")
+        crates.append(word)
         DEBUG1 and print(f"crates: {crates}")
-    new_stack = [str(x) for x in range(1, max+1)]
-    count = 0
-    for row in crates:
-        count += 1
-        count % 10000 == 0 and print(f"{count / len(stacks)*100}% complete")
-        DEBUG1 and print(f"row: {row}")
-        for i, pile in enumerate(row):
-            if pile != ' ':
-                new_stack[i] = new_stack[i]+pile
-    DEBUG1 and print(f"new_stack: {new_stack}")
-    print("Parsing Stacks Complete")
-    instructions = inputlist[1][::]
+#    new_stack = [str(x) for x in range(1, max+1)]
+#    for row in crates:
+#        DEBUG1 and print(f"row: {row}")
+#        for i, pile in enumerate(row):
+#            if pile != ' ':
+#                new_stack[i] = new_stack[i]+pile
+#    DEBUG1 and print(f"new_stack: {new_stack}")
+    print("Entering Transpose")
+    DEBUG1 and print(f"crates: {crates}")
+    new_stack1 = list(zip(*crates))
+    DEBUG1 and print(f"New stak: {new_stack1}")
+    new_stack = [list(sublist) for sublist in new_stack1]
+    new_stack = [[x for x in y if x != ' '] for y in new_stack]
+    print("Transpose Done!")
+    DEBUG1 and print(new_stack)
+#    instructions = inputlist[1][::]
+    instructions = inputlist[1]
     DEBUG1 and print(f"stacks: {stacks}, instructions: {instructions}")
     DEBUG1 and print(f"new_stack: {new_stack}")
     count = 0
+    tot = len(instructions)
     for instruction in instructions:
         count += 1
-        count % 1000 == 0 and print(f"{count % len(instructions)}% complete")
-        number_to_move, from_stack, to_stack = map(int, re.findall(r'\d+', instruction))
+        count % 100 == 0 and print(f"{count} of {tot} complete")
+        args = instruction.split()
+        number_to_move, from_stack, to_stack = int(args[1]), int(args[3]), int(args[5])
+#        number_to_move, from_stack, to_stack = map(int, re.findall(r'\d+', instruction))
         DEBUG1 and print(f"\n#: {number_to_move}, from: {from_stack}, to: {to_stack}, stacks: {new_stack}")
         to_move = new_stack[from_stack-1][-number_to_move:][::-1]
         new_stack[to_stack-1] = new_stack[to_stack-1] + to_move
@@ -108,14 +119,12 @@ def part_two(inputlist):
             if pile != ' ':
                 new_stack[i] = new_stack[i] + pile
     DEBUG2 and print(f"new_stack: {new_stack}")
-    print("Parsing Stacks Complete")
     instructions = inputlist[1][::]
     DEBUG2 and print(f"stacks: {stacks}, instructions: {instructions}")
     DEBUG2 and print(f"new_stack: {new_stack}")
-    count = 0
     for instruction in instructions:
-        count += 1
-        len(instructions) % 1000 == 0 and print(f"{count % len(instructions)}% complete")
+        thing = re.findall(r'\d+', instruction)
+        DEBUG2 and print(f"digit: {thing}")
         number_to_move, from_stack, to_stack = map(int, re.findall(r'\d+', instruction))
         DEBUG2 and print(f"\n#: {number_to_move}, from: {from_stack}, to: {to_stack}, stacks: {new_stack}")
         to_move = new_stack[from_stack - 1][-number_to_move:]
@@ -140,5 +149,5 @@ else:
 print(f"ADVENT OF CODE: {Path(__file__).stem}")
 L = get_data(inputData)
 print(f"Part one: {part_one(L)}")
-print(f"Part two: {part_two(L)}")
+#print(f"Part two: {part_two(L)}")
 print(f"Elapsed Total time: {sum(total_time):.4f}s")
