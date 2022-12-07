@@ -35,7 +35,7 @@ def get_data(inputdata):
         parsed.append(holding)
     return parsed
 
-
+@timer_func
 def part_one(inputlist):
     """
     1. Reverse the input so you can see how many piles there are
@@ -81,13 +81,14 @@ def part_one(inputlist):
     tot = len(instructions)
     for instruction in instructions:
         count += 1
-        count % 100 == 0 and print(f"{count} of {tot} complete")
+        count % 100 == 0 and print(f"{count/tot*100}% complete")
         args = instruction.split()
         number_to_move, from_stack, to_stack = int(args[1]), int(args[3]), int(args[5])
 #        number_to_move, from_stack, to_stack = map(int, re.findall(r'\d+', instruction))
         DEBUG1 and print(f"\n#: {number_to_move}, from: {from_stack}, to: {to_stack}, stacks: {new_stack}")
         to_move = new_stack[from_stack-1][-number_to_move:][::-1]
-        new_stack[to_stack-1] = new_stack[to_stack-1] + to_move
+#        new_stack[to_stack-1] = new_stack[to_stack-1] + to_move
+        new_stack[to_stack - 1].extend(to_move)
         new_stack[from_stack-1] = new_stack[from_stack-1][:-number_to_move]
         DEBUG1 and print(f"BECOMES => stacks: {new_stack}, moving: {to_move}, to stack: {new_stack[to_stack-1]}")
     DEBUG1 and print(f"final_stack: {new_stack}")
@@ -142,12 +143,12 @@ DEBUG2 = False
 TESTING = True
 
 if TESTING:
-    inputData = f'{Path(__file__).stem}_test2.in'
+    inputData = f'{Path(__file__).stem}_test.in'
 else:
     inputData = f'{Path(__file__).stem}.in'
 
 print(f"ADVENT OF CODE: {Path(__file__).stem}")
 L = get_data(inputData)
 print(f"Part one: {part_one(L)}")
-#print(f"Part two: {part_two(L)}")
+print(f"Part two: {part_two(L)}")
 print(f"Elapsed Total time: {sum(total_time):.4f}s")
