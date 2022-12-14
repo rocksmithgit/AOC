@@ -26,37 +26,29 @@ def get_data(inputdata):
     infile = sys.argv[1] if len(sys.argv) > 1 else inputdata
     parsed_data = []
     with open(infile) as f:
-        all_corners = []
         for line in f:
-            line = line.replace('->', ' ')
-            DEBUG and print(f"line: {line}")
-            corners = line.split()
+            corners = line.split(' -> ')
             wall = []
             for corner in corners:
                 tpl = tuple(map(int, corner.split(',')))
                 wall.append(tpl)
-            DEBUG and print(f"wall {wall}")
-            for i in range(len(wall)-1):
-                DEBUG and print(f"considered pair: {wall[i]}, {wall[i+1]}")
-                if wall[i][1] == wall[i+1][1]:
-                    DEBUG and print(f"wall2a: {wall}")
-#                    print(f"i: {i}, range: {len(wall) - 1}")
-                    DEBUG and print(f"{wall[i][0]}, {wall[i+1][0]}")
-                    for j in range(min(wall[i][0], wall[i+1][0]), max(wall[i][0], wall[i+1][0])+1):
-#                        print(f"j range_a {wall[i][0]}, {wall[i+1][0]+1}")
-                        DEBUG and print(f"adding x: {(j, wall[i][1])}")
-                        parsed_data.append((j, wall[i][1]))
-                        DEBUG and print(f"parsed: {parsed_data}")
-                elif wall[i][0] == wall[i+1][0]:
-                    DEBUG and print(f"wall2b: {wall}")
-#                    print(f"i: {i}, range: {len(wall) - 1}")
-                    for j in range(min(wall[i][1], wall[i+1][1]), max(wall[i][1], wall[i+1][1])+1):
-#                        print(f"j range_b {wall[i][1]}, {wall[i+1][1]+1}")
-                        DEBUG and print(f"adding y: {(wall[i][0], j)}")
-                        parsed_data.append((wall[i][0], j))
-                        DEBUG and print(f"parsed: {parsed_data}")
+
+            start = wall[0]
+            for finish in wall:
+
+                DEBUG and print(f"considered pair: {start}, {finish}")
+
+                sx, sy = start
+                fx, fy = finish
+                if sy == fy:
+                    for j in agnosticRange(sx, fx, 1, 1):
+                        parsed_data.append((j, sy))
+                elif sx == fx:
+                    for j in agnosticRange(sy, fy, 1, 1):
+                        parsed_data.append((sx, j))
                 else:
-                    pass
+                    sys.exit("something went wrong tp get here")
+                start = finish
 
     DEBUG and print(f"all_corners: {all_corners}")
     DEBUG and print(f"parsed data: {parsed_data}")
@@ -64,17 +56,8 @@ def get_data(inputdata):
     return parsed_data
 
 
-def isRock(coords, rock):
-    DEBUG and print(f"is_next_rock comparison: {rock}, {coords in rock}")
-    return coords in rock
-
-
-def isSand(coords, sand):
-    DEBUG and print(f"is_next_sand comparison: {sand} {coords in sand}")
-    return coords in sand
-
-def isOccupied(coords, occupied):
-    return coords in occupied
+def agnosticRange(a, b, offset, step):
+    return range(a, b + offset, step) if b > a else range(a, b - offset, -step)
 
 
 def move(coords, parameters, p2=False):
@@ -105,7 +88,7 @@ def move(coords, parameters, p2=False):
     elif dr not in occupied:
         DEBUG and print(f"3 current x,y: {x},{y}, next move is to {x+1}, {y+1}")
         return move(dr, parameters, p2)
-    elif not coords in occupied:
+    elif coords not in occupied:
         DEBUG and print(f"Sand settled at x, y {x}, {y}")
         return coords, parameters
     else:
