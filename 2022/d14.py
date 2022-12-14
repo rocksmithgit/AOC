@@ -73,77 +73,82 @@ def isSand(coords, sand):
     DEBUG and print(f"is_next_sand comparison: {sand} {coords in sand}")
     return coords in sand
 
+def isOccupied(coords, occupied):
+    return coords in occupied
 
-def move(coords, parameters):
+
+def move(coords, parameters, p2=False):
     """At each step sand moves:
-                  - down until hits sand or rock, and if not possible
+                  - down until hits sand or rock,
                   - then goes down and left until hits sand/rock and if not possible
-                  - then goes down/right"""
-    x, y = coords[0], coords[1]
-#    xrange = parameters[0]
-    yfloor = parameters[0]
-#    print(f"yflloe: {yfloor}")
-    rock = parameters[1]
-    sand = parameters[2]
-    if not isRock((x, y+1), rock) and not isSand((x, y+1), sand) and not y+1 > yfloor:
-        DEBUG and print(f"current x,y: {x},{y}, next move is to {x}, {y+1}")
-        return move((x, y+1), parameters)
-    elif not isRock((x-1, y+1), rock) and not isSand((x-1, y+1), sand):
-#        if not x-1 < min(xrange):
-        if not y+1 > yfloor:
-            DEBUG and print(f"current x,y: {x},{y}, next move is to {x-1}, {y+1}")
-            return move((x-1, y+1), parameters)
-        else:
-            DEBUG and print(f"Sand will move to infinity")
-            return False, False
-    elif not isRock((x+1, y+1), rock) and not isSand((x+1, y+1), sand):
-#        if not x+1 > max(xrange):
-        if not y+1 > yfloor:
-            DEBUG and print(f"current x,y: {x},{y}, next move is to {x+1}, {y+1}")
-            return move((x+1, y+1), parameters)
-        else:
-            DEBUG and print(f"Sand will move to infinity")
-            return False, False
-    else:
+                  - then goes down/right
+
+       P1 checks to see if sand ends up at the floor level; if so we have reached solution
+       P2 check if sand is 1 above floor, locks it in place if is, and continues"""
+
+    x, y = coords
+    dn = (x, y + 1)
+    dl = (x - 1, y + 1)
+    dr = (x + 1, y + 1)
+    yfloor, occupied = parameters
+
+    if y == yfloor-1 and p2:
+        return coords, parameters
+    elif y == yfloor:
+        return False, False
+    elif dn not in occupied:
+        DEBUG and print(f"1 current x,y: {x},{y}, next move is to {x}, {y+1}")
+        return move(dn, parameters, p2)
+    elif dl not in occupied:
+        DEBUG and print(f"2 current x,y: {x},{y}, next move is to {x-1}, {y+1}")
+        return move(dl, parameters, p2)
+    elif dr not in occupied:
+        DEBUG and print(f"3 current x,y: {x},{y}, next move is to {x+1}, {y+1}")
+        return move(dr, parameters, p2)
+    elif not coords in occupied:
         DEBUG and print(f"Sand settled at x, y {x}, {y}")
-        if not (x, y) in set(sand):
-            return coords, parameters
-        else:
-            return False, False
+        return coords, parameters
+    else:
+        return False, False
 
 
 @timer_func
 def part_one(inputlist):
-
-    xrange = [min(inputlist)[0], max(inputlist)[0]]
     yfloor = max([x[1] for x in inputlist])
-    DEBUG1 and print(f"XRANGE: {xrange}, YFLOOR: {yfloor} {max(inputlist)[1]}")
-    rock = [(498, 2), (500, 2), (499, 2), (501, 2), (502, 2)]
-    rock = inputlist
-    sand = []
-    parameters = [yfloor, rock, sand]
-
+    occupied = set(inputlist)
+    parameters = [yfloor, occupied]
     count = 0
+
     while True:
-        count % 100 == 0 and print(f"Sand: {count}")
         DEBUG1 and print(f"\nSand # {count + 1}")
         res, parameters = move((500, 0), parameters)
         DEBUG1 and print(f"res: {res}")
         if res:
-            sand.append(res)
+            occupied.add(res)
             count += 1
-            DEBUG1 and print(f"new sand {sand}")
         else:
-            DEBUG1 and print(f"rock: {rock}, sand: {sand}")
             break
-            #sys.exit("no more moves possible")
-    print(f"Total sand dropped: {count}")
     return count
 
 
 @timer_func
 def part_two(inputlist):
-    return
+    yfloor = max([x[1] for x in inputlist]) + 2
+    occupied = set(inputlist)
+    parameters = [yfloor, occupied]
+    count = 0
+    while True:
+        DEBUG2 and print(f"\nSand # {count + 1}")
+        res, parameters = move((500, 0), parameters, True)
+        DEBUG2 and print(f"res2: {res}")
+        if res:
+            if res[1] == (500, 0):
+                break
+            occupied.add(res)
+            count += 1
+        else:
+            break
+    return count
 
 
 total_time = []
